@@ -1,5 +1,5 @@
 repos:
-  - repo: github.com/alextonkonogov/gb_go_backend-1
+  - repo: github.com/alextonkonogov/gb-go-backend-1
     rev: v1.0.2
     hooks:
       - id: golangci-lint
