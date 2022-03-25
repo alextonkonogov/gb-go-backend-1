@@ -1,6 +1,6 @@
 repos:
-  -   repo: github.com/alextonkonogov/gb_go_backend-1
-      rev: v1.0.2
-      hooks:
-        -   id: golangci-lint
-        -   id: go-unit-tests
+  - repo: github.com/alextonkonogov/gb_go_backend-1
+    rev: v1.0.2
+    hooks:
+      - id: golangci-lint
+      - id: go-unit-tests
