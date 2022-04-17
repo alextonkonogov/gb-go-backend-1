@@ -133,5 +133,5 @@ func (h *UploadHandler) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fileLink := h.HostAddr + "/" + header.Filename
-	_, err = fmt.Fprintln(w, fileLink)
+	fmt.Fprintln(w, fileLink)
 }
