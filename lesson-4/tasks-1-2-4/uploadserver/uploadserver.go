@@ -26,7 +26,10 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 	fmt.Println("Upload-Server started on", srv.Addr)
-	srv.ListenAndServe()
+	err := srv.ListenAndServe()
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 type UploadHandler struct {
@@ -67,10 +70,7 @@ func (h *UploadHandler) GetFiles(w http.ResponseWriter, r *http.Request) {
 	files := []file{}
 	filesMap := make(map[string][]file)
 
-	filepath.Walk(h.UploadDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			log.Println(err)
-		}
+	err := filepath.Walk(h.UploadDir, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() && info.Name() != ".DS_Store" {
 			f := file{}
 			f.Name = info.Name()
@@ -82,6 +82,9 @@ func (h *UploadHandler) GetFiles(w http.ResponseWriter, r *http.Request) {
 		}
 		return nil
 	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 	ext := strings.Trim(r.FormValue("ext"), ".")
 	if ext != "" {
@@ -100,7 +103,7 @@ func (h *UploadHandler) GetFiles(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(files)
+	err = json.NewEncoder(w).Encode(files)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -123,7 +126,7 @@ func (h *UploadHandler) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fileName := h.UploadDir + "/" + header.Filename
-	err = ioutil.WriteFile(fileName, data, 0777)
+	err = ioutil.WriteFile(fileName, data, 0600)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Unable to save file", http.StatusInternalServerError)

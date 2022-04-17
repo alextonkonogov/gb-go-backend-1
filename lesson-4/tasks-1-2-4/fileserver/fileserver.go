@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -27,5 +28,8 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 	fmt.Printf("File-Server is started. Try it on http://localhost%s\n", fs.Addr)
-	fs.ListenAndServe()
+	err := fs.ListenAndServe()
+	if err != nil {
+		log.Panic(err)
+	}
 }
