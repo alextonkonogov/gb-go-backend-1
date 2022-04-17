@@ -80,7 +80,7 @@ func (h *UploadHandler) GetFiles(w http.ResponseWriter, r *http.Request) {
 			files = append(files, f)
 			filesMap[f.Ext] = append(filesMap[f.Ext], f)
 		}
-		return nil
+		return err
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -133,5 +133,5 @@ func (h *UploadHandler) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fileLink := h.HostAddr + "/" + header.Filename
-	fmt.Fprintln(w, fileLink)
+	_, err = fmt.Fprintln(w, fileLink)
 }
