@@ -90,7 +90,7 @@ func (h *UploadHandler) GetFiles(w http.ResponseWriter, r *http.Request) {
 	if ext != "" {
 		if match, ok := filesMap[ext]; ok {
 			w.Header().Set("Content-Type", "application/json")
-			err := json.NewEncoder(w).Encode(match)
+			err = json.NewEncoder(w).Encode(match)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
